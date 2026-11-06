@@ -15,15 +15,15 @@
 /*
  * Lotus58 Glow v1.23 每键 RGB
  * 每半 29 颗 SK6812 mini-E，数据脚经 JP16(pad2-pad1) 接到 D1 = P0.06。
- * 用 SPI1 的 MOSI 模拟 WS2812 时序（与 ZMK 官方 kyria/nrfmicro_13 覆盖写法一致）。
+ * 用 SPI3 的 MOSI 模拟 WS2812 时序（nRF52840 上 SPI3 有独立中断，避免 SPIM1/TWIM1 共用 IRQ4）。
  */
 &pinctrl {
-    spi1_default: spi1_default {
+    spi3_default: spi3_default {
         group1 {
             psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
         };
     };
-    spi1_sleep: spi1_sleep {
+    spi3_sleep: spi3_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
             low-power-enable;
@@ -31,11 +31,11 @@
     };
 };
 
-&spi1 {
+&spi3 {
     compatible = "nordic,nrf-spim";
     status = "okay";
-    pinctrl-0 = <&spi1_default>;
-    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
     pinctrl-names = "default", "sleep";
     led_strip: ws2812@0 {
         compatible = "worldsemi,ws2812-spi";
