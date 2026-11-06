@@ -15,21 +15,18 @@
 /*
  * Lotus58 Glow v1.23 每键 RGB
  * 每半 29 颗 SK6812 mini-E，数据脚经 JP16(pad2-pad1) 接到 D1 = P0.06。
- * 用 SPI3 的 MOSI 模拟 WS2812 时序（nRF52840 上 SPI3 有独立中断，避免 SPIM1/TWIM1 共用 IRQ4）。
- * 注意：nRF52 的 SPIM 必须配置 SCK 引脚才能产生时钟并触发 END 事件，
- * 这里借用空的 D0 = P0.08（无线方案不焊 TRRS）。
+ * 用 SPI3 的 MOSI 模拟 WS2812 时序（nRF52840 上 SPI3 有独立 IRQ 47，
+ * 不能用 SPI1：SPIM1 与 TWIM1 共用 IRQ 4，传输会一直等不到 END 并超时）。
  */
 &pinctrl {
     spi3_default: spi3_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
         };
     };
     spi3_sleep: spi3_sleep {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
             low-power-enable;
         };
     };
