@@ -12,3 +12,9 @@ include:
   # 配对/换板后先刷它清 settings
   - board: nrfmicro_13
     shield: settings_reset
+  # 调试版：USB 日志（与 Studio 的 CDC-ACM 二选一），每次开机强制恢复默认设置
+  - board: nrfmicro_13
+    shield: lotus58_left
+    snippet: zmk-usb-logging
+    cmake-args: -DCONFIG_ZMK_SETTINGS_RESET_ON_START=y -DCONFIG_ZMK_LOG_LEVEL_DBG=y
+    artifact-name: lotus58_left_debug
